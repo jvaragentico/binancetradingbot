@@ -11,10 +11,10 @@ Python 3.11 or newer is required. There are no third-party Python packages and D
 ```powershell
 Copy-Item config.example.json config.json
 python bot.py once
-python bot.py run
+python bot.py run --hours 72
 ```
 
-`once` fetches one market snapshot and makes one paper decision. `run` repeats every 60 seconds until Ctrl+C. `python bot.py status` prints the saved paper portfolio; `python bot.py report` summarizes estimated equity and swaps. `state.json` and `events.jsonl` are created locally and ignored by Git. Running `once` again uses the existing state; to start a **new** simulation, save or remove those two local files first. Keep the configuration fixed during a simulation.
+`once` fetches one market snapshot and makes one paper decision. `run` repeats every 60 seconds until Ctrl+C or the optional duration expires. `python bot.py status` prints the saved paper portfolio; `python bot.py report` summarizes estimated equity and swaps. `state.json` and `events.jsonl` are created locally and ignored by Git. Running `once` again uses the existing state; to start a **new** simulation, save or remove those two local files first. Keep the configuration fixed during a simulation.
 
 The default configuration starts in USDT. It monitors WBNB/USDT; it does **not** automatically buy WBNB on startup. An entry requires both a rising Binance BNB trend and positive five-minute DEX price and buy/sell flow. The bot can hold USDT for long periods.
 
@@ -42,4 +42,5 @@ The requested $20-to-$100 outcome is a **400% gain in three days** (about 71% co
 - [PancakeSwap routes and fees](https://docs.pancakeswap.finance/trade/pancakeswap-exchange/fees-and-routes)
 
 Run `python -m unittest discover -s tests -v` to check the parser and paper risk logic.
+
 
