@@ -420,7 +420,13 @@ def main() -> int:
     parser.add_argument("--state", type=Path, default=Path("state.json"))
     parser.add_argument("--events", type=Path, default=Path("events.jsonl"))
     parser.add_argument("--snapshot", type=Path, help="offline raw JSON with dex_pairs and binance_klines")
+    parser.add_argument("--hours", type=float, help="stop a paper run after this many hours")
     args = parser.parse_args()
+    if args.hours is not None and (
+        args.command != "run" or not math.isfinite(args.hours) or args.hours <= 0
+    ):
+        parser.error("--hours requires `run` and a positive finite number")
+    deadline = time.monotonic() + args.hours * 3600 if args.hours else None
     try:
         if args.command == "status":
             if not args.state.exists():
@@ -452,6 +458,9 @@ def main() -> int:
             return 0
         cfg = Config.load(args.config)
         while True:
+            if deadline is not None and time.monotonic() >= deadline:
+                print("Paper run duration completed.")
+                return 0
             try:
                 if args.snapshot:
                     raw = json.loads(args.snapshot.read_text(encoding="utf-8"))
@@ -465,7 +474,10 @@ def main() -> int:
                     return 1
             if args.command == "once":
                 return 0
-            time.sleep(cfg.poll_seconds)
+            wait_seconds = cfg.poll_seconds
+            if deadline is not None:
+                wait_seconds = min(wait_seconds, max(0, deadline - time.monotonic()))
+            time.sleep(wait_seconds)
     except (OSError, ValueError, TypeError) as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
@@ -473,4 +485,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 
