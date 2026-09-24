@@ -1,0 +1,22 @@
+{
+  "base_token_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+  "quote_token_address": "0x55d398326f99059ff775485246999027b3197955",
+  "initial_asset": "quote",
+  "starting_usd": 20.0,
+  "gas_reserve_usd": 0.79,
+  "poll_seconds": 60,
+  "min_liquidity_usd": 100000.0,
+  "min_volume_m5_usd": 1000.0,
+  "min_m5_trades": 5,
+  "min_pool_age_hours": 0,
+  "fee_pct_per_side": 0.25,
+  "slippage_pct_per_side": 0.5,
+  "gas_usd_per_swap": 0.05,
+  "stop_loss_pct": 4.0,
+  "take_profit_pct": 6.0,
+  "max_drawdown_pct": 10.0,
+  "max_swaps_per_day": 8,
+  "cooldown_minutes": 15,
+  "min_trade_usd": 5.0
+}
+
